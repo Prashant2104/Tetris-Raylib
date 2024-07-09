@@ -1,4 +1,5 @@
 #include "Tetrominoes.h"
+#include "Settings.h"
 
 Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board& board) :
     shape(shape),
@@ -8,6 +9,8 @@ Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board&
     board(board),
     currentRotation(Rotation::UP)
 {
+    currentPosition = boardPos;
+    fallCounter = 0;
 }
 
 void Tetromino::RotateClockwise()
@@ -18,6 +21,31 @@ void Tetromino::RotateClockwise()
 void Tetromino::RotateCounterClockwise()
 {
     currentRotation = Rotation((int(currentRotation) + 3) % 4);
+}
+
+void Tetromino::MoveLeft()
+{
+    if (currentPosition.GetX() > 0) {
+        currentPosition.SetX(currentPosition.GetX() - 1);
+    }
+}
+
+void Tetromino::MoveRight()
+{
+    if (currentPosition.GetX() + dimension < board.GetBoardSize().GetX()) {
+        currentPosition.SetX(currentPosition.GetX() + 1);
+    }
+}
+
+void Tetromino::Falling()
+{
+    fallCounter += GetFrameTime();
+    if (fallCounter >= Settings::fallTime) {
+        fallCounter = 0;
+        if (currentPosition.GetY() + dimension < board.GetBoardSize().GetY()) {
+            currentPosition.SetY(currentPosition.GetY() + 1);
+        }
+    }
 }
 
 void Tetromino::Draw() const
@@ -44,7 +72,7 @@ void Tetromino::Draw() const
             }
             if (cell)
             {
-                board.DrawCell(boardPos + Vec2<int>{x, y}, color);
+                board.DrawCell(currentPosition + Vec2<int>{x, y}, color);
             }
         }
     }

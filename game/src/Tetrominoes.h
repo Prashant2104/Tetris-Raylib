@@ -19,6 +19,9 @@ public:
     Tetromino(const bool* shape, int dimension, Color color, const Board& board);
     void RotateClockwise();
     void RotateCounterClockwise();
+    void MoveLeft();
+    void MoveRight();
+    void Falling();
     void Draw() const;
 private:
     Vec2<int> boardPos;
@@ -27,6 +30,8 @@ private:
     const int dimension;
     const Color color;
     const Board& board;
+    Vec2<int> currentPosition;
+    float fallCounter;
 };
 
 class Straight : public Tetromino

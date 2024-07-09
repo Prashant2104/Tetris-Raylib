@@ -13,4 +13,7 @@ namespace Settings {
     inline constexpr int padding = 1;
     inline constexpr Vec2<int> boardPosition{ 60,60 };
     inline constexpr Vec2<int> boardSize{ 10,20 };
+
+    //Tetromino Settings
+    inline constexpr int fallTime = 1;
 }
