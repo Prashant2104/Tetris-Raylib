@@ -39,6 +39,10 @@ private:
     bool CheckBottomCollision(int layerFromBottom);
     bool CheckLeftCollision(int layerFromLeft);
     bool CheckRightCollision(int layerFromRight);
+
+    bool CheckBottomCollision(int layerFromBottom, Rotation rotation);
+    bool CheckLeftCollision(int layerFromLeft, Rotation rotation);
+    bool CheckRightCollision(int layerFromRight, Rotation rotation);
 };
 
 class Straight : public Tetromino

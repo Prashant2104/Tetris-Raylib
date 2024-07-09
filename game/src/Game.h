@@ -15,5 +15,5 @@ private:
     void Draw();
     void Update();
 
-    Jay tetromino;
+    Straight tetromino;
 };

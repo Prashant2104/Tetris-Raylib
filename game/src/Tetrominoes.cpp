@@ -18,17 +18,20 @@ Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board&
 void Tetromino::RotateClockwise()
 {
     if (bottomedOut) return;
-    if (!CheckRightCollision(1) || !CheckLeftCollision(1))
+
+    Rotation tempRot = Rotation((int(currentRotation) + 1) % 4);
+
+    if (!CheckRightCollision(1, tempRot) || !CheckLeftCollision(1, tempRot))
     {
-        if (CheckLeftCollision(1)) {
+        if (CheckLeftCollision(1, tempRot)) {
             MoveRight();
         }
-        else if (CheckRightCollision(1))
+        else if (CheckRightCollision(1, tempRot))
         {
             MoveLeft();
         }
     }
-    currentRotation = Rotation((int(currentRotation) + 1) % 4);
+    currentRotation = tempRot;
 }
 
 void Tetromino::RotateCounterClockwise()
@@ -130,31 +133,27 @@ void Tetromino::IncreaseFall(bool fast)
 
 bool Tetromino::CheckBottomCollision(int layerFromBottom)
 {
+    return CheckBottomCollision(layerFromBottom, currentRotation);
+}
+bool Tetromino::CheckBottomCollision(int layerFromBottom, Rotation rotation)
+{
     if (layerFromBottom == 0) return true;
 
     for (int i = 0; i < dimension; i++) {
         bool isCellFilled = false;
-        switch (currentRotation)
+        switch (rotation)
         {
         case Tetromino::Rotation::UP:
             isCellFilled = shape[i + (dimension * (dimension - layerFromBottom))];
-
-            //std::cout << i + (dimension * (dimension - 1)) << std::endl;
             break;
         case Tetromino::Rotation::RIGHT:
-            isCellFilled = shape[dimension * (dimension - layerFromBottom) - (dimension * i) + (dimension - layerFromBottom)];
-
-            //std::cout << dimension * (dimension - 1) - (dimension * i) + (dimension - 1) << std::endl;
+            isCellFilled = shape[dimension * dimension - (dimension * i) - layerFromBottom];
             break;
         case Tetromino::Rotation::DOWN:
             isCellFilled = shape[dimension - layerFromBottom - i];
-
-            //std::cout << dimension - 1 - i << std::endl;
             break;
         case Tetromino::Rotation::LEFT:
             isCellFilled = shape[dimension * i];
-
-            //std::cout << dimension * i << std::endl;
             break;
         default:
             break;
@@ -166,11 +165,15 @@ bool Tetromino::CheckBottomCollision(int layerFromBottom)
 
 bool Tetromino::CheckLeftCollision(int layerFromLeft)
 {
+    return CheckLeftCollision(layerFromLeft, currentRotation);
+}
+bool Tetromino::CheckLeftCollision(int layerFromLeft, Rotation rotation)
+{
     if (layerFromLeft == 0) return true;
     layerFromLeft -= 1;
     for (int i = 0; i < dimension; i++) {
         bool isCellFilled = false;
-        switch (currentRotation)
+        switch (rotation)
         {
         case Tetromino::Rotation::UP:
             isCellFilled = shape[dimension * i + layerFromLeft];
@@ -194,11 +197,15 @@ bool Tetromino::CheckLeftCollision(int layerFromLeft)
 
 bool Tetromino::CheckRightCollision(int layerFromRight)
 {
+    return CheckRightCollision(layerFromRight, currentRotation);
+}
+bool Tetromino::CheckRightCollision(int layerFromRight, Rotation rotation)
+{
     if (layerFromRight == 0) return true;
     layerFromRight -= 1;
     for (int i = 0; i < dimension; i++) {
         bool isCellFilled = false;
-        switch (currentRotation)
+        switch (rotation)
         {
         case Tetromino::Rotation::UP:
             isCellFilled = shape[(dimension - 1) + (dimension * i) - layerFromRight];
