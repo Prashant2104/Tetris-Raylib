@@ -35,7 +35,9 @@ private:
     float fallCounter;
     float fallMultiplier;
 private:
-    bool CheckBottomCollision();
+    bool CheckBottomCollision(int layerFromBottom);
+    bool CheckLeftCollision(int layerFromLeft);
+    bool CheckRightCollision(int layerFromRight);
 };
 
 class Straight : public Tetromino

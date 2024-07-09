@@ -1,6 +1,6 @@
 #include "Tetrominoes.h"
 #include "Settings.h"
-
+#include <iostream>
 Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board& board) :
     shape(shape),
     dimension(dimension),
@@ -26,29 +26,55 @@ void Tetromino::RotateCounterClockwise()
 
 void Tetromino::MoveLeft()
 {
-    if (currentPosition.GetX() > 0) {
-        currentPosition.SetX(currentPosition.GetX() - 1);
+    for (int i = 0; i < dimension; i++) {
+        if (currentPosition.GetX() + i > 0 && CheckLeftCollision(i)) {
+            currentPosition.SetX(currentPosition.GetX() - 1);
+            return;
+        }
     }
+    std::cout << "Left" << std::endl;
 }
 
 void Tetromino::MoveRight()
 {
-    if (currentPosition.GetX() + dimension < board.GetBoardSize().GetX()) {
-        currentPosition.SetX(currentPosition.GetX() + 1);
+    for (int i = 0; i < dimension; i++) {
+        if (currentPosition.GetX() + dimension - i < board.GetBoardSize().GetX() && CheckRightCollision(i)) {
+            currentPosition.SetX(currentPosition.GetX() + 1);
+            return;
+        }
     }
+    std::cout << "Right" << std::endl;
 }
 
 void Tetromino::Falling()
 {
-    fallCounter += GetFrameTime()*fallMultiplier;
+    fallCounter += GetFrameTime() * fallMultiplier;
     if (fallCounter >= Settings::fallTime) {
         fallCounter = 0;
-        if (CheckBottomCollision()) {
-            currentPosition.SetY(currentPosition.GetY() + 1);
-        }
-        /*if (currentPosition.GetY() + dimension < board.GetBoardSize().GetY()) {
+        /*if (CheckBottomCollision()) {
             currentPosition.SetY(currentPosition.GetY() + 1);
         }*/
+        /* if (currentPosition.GetY() + dimension < board.GetBoardSize().GetY()) {
+             currentPosition.SetY(currentPosition.GetY() + 1);
+         }
+         else if (currentPosition.GetY() + dimension - 1 < board.GetBoardSize().GetY() && CheckBottomCollision(1)) {
+             currentPosition.SetY(currentPosition.GetY() + 1);
+         }
+         else if (currentPosition.GetY() + dimension - 2 < board.GetBoardSize().GetY() && CheckBottomCollision(2)) {
+             currentPosition.SetY(currentPosition.GetY() + 1);
+         }
+         else {
+
+             std::cout << "Bottom" << std::endl;
+         }*/
+        for (int i = 0; i < dimension; i++) {
+            if (currentPosition.GetY() + dimension - i < board.GetBoardSize().GetY() && CheckBottomCollision(i)) {
+                currentPosition.SetY(currentPosition.GetY() + 1);
+                return;
+            }
+        }
+        std::cout << "Bottom" << std::endl;
+
     }
 }
 
@@ -66,7 +92,7 @@ void Tetromino::Draw() const
                 cell = shape[dimension * (dimension - 1) - dimension * x + y];
                 break;
             case Tetromino::Rotation::DOWN:
-                cell = shape[(dimension * dimension - 1) - dimension * y - x];
+                cell = shape[(dimension * dimension) - 1 - dimension * y - x];
                 break;
             case Tetromino::Rotation::LEFT:
                 cell = shape[dimension - 1 + dimension * x - y];
@@ -92,12 +118,94 @@ void Tetromino::IncreaseFall(bool fast)
     }
 }
 
-bool Tetromino::CheckBottomCollision()
+bool Tetromino::CheckBottomCollision(int layerFromBottom)
 {
-    int i = dimension * (dimension - 1);
-    for (i; i < dimension * dimension; i++) {
-        if (shape[i])
-            return false;
+    if (layerFromBottom == 0) return true;
+
+    for (int i = 0; i < dimension; i++) {
+        bool isCellFilled = false;
+        switch (currentRotation)
+        {
+        case Tetromino::Rotation::UP:
+            isCellFilled = shape[i + (dimension * (dimension - layerFromBottom))];
+
+            //std::cout << i + (dimension * (dimension - 1)) << std::endl;
+            break;
+        case Tetromino::Rotation::RIGHT:
+            isCellFilled = shape[dimension * (dimension - layerFromBottom) - (dimension * i) + (dimension - layerFromBottom)];
+
+            //std::cout << dimension * (dimension - 1) - (dimension * i) + (dimension - 1) << std::endl;
+            break;
+        case Tetromino::Rotation::DOWN:
+            isCellFilled = shape[dimension - layerFromBottom - i];
+
+            //std::cout << dimension - 1 - i << std::endl;
+            break;
+        case Tetromino::Rotation::LEFT:
+            isCellFilled = shape[dimension * i];
+
+            //std::cout << dimension * i << std::endl;
+            break;
+        default:
+            break;
+        }
+        if (isCellFilled) return false;
+    }
+    return true;
+}
+
+bool Tetromino::CheckLeftCollision(int layerFromLeft)
+{
+    if (layerFromLeft == 0) return true;
+    layerFromLeft -= 1;
+    for (int i = 0; i < dimension; i++) {
+        bool isCellFilled = false;
+        switch (currentRotation)
+        {
+        case Tetromino::Rotation::UP:
+            isCellFilled = shape[dimension * i + layerFromLeft];
+            break;
+        case Tetromino::Rotation::RIGHT:
+            isCellFilled = shape[dimension * (dimension - 1) + i - (dimension * layerFromLeft)];
+            break;
+        case Tetromino::Rotation::DOWN:
+            isCellFilled = shape[(dimension * dimension) - 1 - (dimension * i) - layerFromLeft];
+            break;
+        case Tetromino::Rotation::LEFT:
+            isCellFilled = shape[dimension - (i + 1) + (dimension * layerFromLeft)];
+            break;
+        default:
+            break;
+        }
+        if (isCellFilled) return false;
+    }
+    return true;
+}
+
+bool Tetromino::CheckRightCollision(int layerFromRight)
+{
+    if (layerFromRight == 0) return true;
+    layerFromRight -= 1;
+    for (int i = 0; i < dimension; i++) {
+        bool isCellFilled = false;
+        switch (currentRotation)
+        {
+        case Tetromino::Rotation::UP:
+            isCellFilled = shape[(dimension - 1) + (dimension * i) - layerFromRight];
+            break;
+        case Tetromino::Rotation::RIGHT:
+            isCellFilled = shape[i + (dimension * layerFromRight)];
+            break;
+        case Tetromino::Rotation::DOWN:
+            isCellFilled = shape[dimension * (dimension - 1) - (dimension * i) + layerFromRight];
+            break;
+        case Tetromino::Rotation::LEFT:
+            isCellFilled = shape[(dimension * dimension) - 1 - i - (dimension * layerFromRight)];
+            break;
+        default:
+            break;
+        }
+        if (isCellFilled) return false;
     }
     return true;
 }
