@@ -12,20 +12,44 @@ Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board&
     currentPosition = boardPos;
     fallCounter = 0;
     fallMultiplier = 1;
+    bottomedOut = false;
 }
 
 void Tetromino::RotateClockwise()
 {
+    if (bottomedOut) return;
+    if (!CheckRightCollision(1) || !CheckLeftCollision(1))
+    {
+        if (CheckLeftCollision(1)) {
+            MoveRight();
+        }
+        else if (CheckRightCollision(1))
+        {
+            MoveLeft();
+        }
+    }
     currentRotation = Rotation((int(currentRotation) + 1) % 4);
 }
 
 void Tetromino::RotateCounterClockwise()
 {
+    if (bottomedOut) return;
+    if (!CheckRightCollision(1) || !CheckLeftCollision(1))
+    {
+        if (CheckLeftCollision(1)) {
+            MoveRight();
+        }
+        else if (CheckRightCollision(1))
+        {
+            MoveLeft();
+        }
+    }
     currentRotation = Rotation((int(currentRotation) + 3) % 4);
 }
 
 void Tetromino::MoveLeft()
 {
+    if (bottomedOut) return;
     for (int i = 0; i < dimension; i++) {
         if (currentPosition.GetX() + i > 0 && CheckLeftCollision(i)) {
             currentPosition.SetX(currentPosition.GetX() - 1);
@@ -37,6 +61,7 @@ void Tetromino::MoveLeft()
 
 void Tetromino::MoveRight()
 {
+    if (bottomedOut) return;
     for (int i = 0; i < dimension; i++) {
         if (currentPosition.GetX() + dimension - i < board.GetBoardSize().GetX() && CheckRightCollision(i)) {
             currentPosition.SetX(currentPosition.GetX() + 1);
@@ -48,33 +73,18 @@ void Tetromino::MoveRight()
 
 void Tetromino::Falling()
 {
+    if (bottomedOut) return;
     fallCounter += GetFrameTime() * fallMultiplier;
     if (fallCounter >= Settings::fallTime) {
         fallCounter = 0;
-        /*if (CheckBottomCollision()) {
-            currentPosition.SetY(currentPosition.GetY() + 1);
-        }*/
-        /* if (currentPosition.GetY() + dimension < board.GetBoardSize().GetY()) {
-             currentPosition.SetY(currentPosition.GetY() + 1);
-         }
-         else if (currentPosition.GetY() + dimension - 1 < board.GetBoardSize().GetY() && CheckBottomCollision(1)) {
-             currentPosition.SetY(currentPosition.GetY() + 1);
-         }
-         else if (currentPosition.GetY() + dimension - 2 < board.GetBoardSize().GetY() && CheckBottomCollision(2)) {
-             currentPosition.SetY(currentPosition.GetY() + 1);
-         }
-         else {
-
-             std::cout << "Bottom" << std::endl;
-         }*/
         for (int i = 0; i < dimension; i++) {
             if (currentPosition.GetY() + dimension - i < board.GetBoardSize().GetY() && CheckBottomCollision(i)) {
                 currentPosition.SetY(currentPosition.GetY() + 1);
                 return;
             }
         }
+        bottomedOut = true;
         std::cout << "Bottom" << std::endl;
-
     }
 }
 

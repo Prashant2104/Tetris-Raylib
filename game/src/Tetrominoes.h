@@ -34,6 +34,7 @@ private:
     Vec2<int> currentPosition;
     float fallCounter;
     float fallMultiplier;
+    bool bottomedOut;
 private:
     bool CheckBottomCollision(int layerFromBottom);
     bool CheckLeftCollision(int layerFromLeft);
