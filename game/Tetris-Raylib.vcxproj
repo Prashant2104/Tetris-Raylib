@@ -265,6 +265,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Board.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\RaylibCpp.h" />
+    <ClInclude Include="src\Settings.h" />
+    <ClInclude Include="src\Tetrominoes.h" />
+    <ClInclude Include="src\Vec2.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -275,14 +283,6 @@
     <ProjectReference Include="..\raylib-master\raylib.vcxproj">
       <Project>{8898EA18-743A-15EF-5DF5-284349369C3F}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Board.h" />
-    <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\RaylibCpp.h" />
-    <ClInclude Include="src\Settings.h" />
-    <ClInclude Include="src\Tetrominoes.h" />
-    <ClInclude Include="src\Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

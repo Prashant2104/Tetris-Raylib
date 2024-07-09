@@ -43,6 +43,11 @@ void Game::Draw()
 {
     ClearBackground(RAYWHITE);
     board.Draw();
+    for (int i = 0; i < Settings::boardSize.GetY(); i++) {
+        for (int j = 0; j < Settings::boardSize.GetX(); j++) {
+            board.DrawCell({ j,i }, GetColor(0x0000000f));
+        }
+    }
     tetromino.Draw();
 }
 
@@ -56,4 +61,8 @@ void Game::Update()
         tetromino.MoveLeft();
     if (IsKeyPressed(KEY_D))
         tetromino.MoveRight();
+    if (IsKeyPressed(KEY_S))
+        tetromino.IncreaseFall(true);
+    if(IsKeyReleased(KEY_S))
+        tetromino.IncreaseFall(false);
 }

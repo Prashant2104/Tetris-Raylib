@@ -11,6 +11,7 @@ Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board&
 {
     currentPosition = boardPos;
     fallCounter = 0;
+    fallMultiplier = 1;
 }
 
 void Tetromino::RotateClockwise()
@@ -39,12 +40,15 @@ void Tetromino::MoveRight()
 
 void Tetromino::Falling()
 {
-    fallCounter += GetFrameTime();
+    fallCounter += GetFrameTime()*fallMultiplier;
     if (fallCounter >= Settings::fallTime) {
         fallCounter = 0;
-        if (currentPosition.GetY() + dimension < board.GetBoardSize().GetY()) {
+        if (CheckBottomCollision()) {
             currentPosition.SetY(currentPosition.GetY() + 1);
         }
+        /*if (currentPosition.GetY() + dimension < board.GetBoardSize().GetY()) {
+            currentPosition.SetY(currentPosition.GetY() + 1);
+        }*/
     }
 }
 
@@ -76,4 +80,24 @@ void Tetromino::Draw() const
             }
         }
     }
+}
+
+void Tetromino::IncreaseFall(bool fast)
+{
+    if (fast) {
+        fallMultiplier = 10;
+    }
+    else {
+        fallMultiplier = 1;
+    }
+}
+
+bool Tetromino::CheckBottomCollision()
+{
+    int i = dimension * (dimension - 1);
+    for (i; i < dimension * dimension; i++) {
+        if (shape[i])
+            return false;
+    }
+    return true;
 }

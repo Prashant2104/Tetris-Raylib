@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeaderFile">
-      <UniqueIdentifier>{3d7f6b5c-136d-4dd1-8345-df98fbb25ee8}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="src\Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RaylibCpp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tetrominoes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vec2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RaylibCpp.cpp">
@@ -24,25 +44,5 @@
     <ClCompile Include="src\Tetrominoes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Board.h">
-      <Filter>HeaderFile</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game.h">
-      <Filter>HeaderFile</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vec2.h">
-      <Filter>HeaderFile</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RaylibCpp.h">
-      <Filter>HeaderFile</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Settings.h">
-      <Filter>HeaderFile</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tetrominoes.h">
-      <Filter>HeaderFile</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

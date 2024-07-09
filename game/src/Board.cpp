@@ -58,7 +58,7 @@ void Board::DrawCell(Vec2<int> pos, Color color) const
 
 void Board::DrawBorder() const
 {
-    raycpp::DrawRectangleLinesEx(screenPos - (cellSize / 2), (boardSize * cellSize) + cellSize + padding, cellSize / 2, BLACK);
+    raycpp::DrawRectangleLinesEx(screenPos - (cellSize / 2), (boardSize * cellSize) + cellSize + padding, cellSize / 2, GetColor(0x000000af));
 }
 
 void Board::Draw() const

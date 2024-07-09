@@ -23,6 +23,7 @@ public:
     void MoveRight();
     void Falling();
     void Draw() const;
+    void IncreaseFall(bool fast);
 private:
     Vec2<int> boardPos;
     Rotation currentRotation;
@@ -32,6 +33,9 @@ private:
     const Board& board;
     Vec2<int> currentPosition;
     float fallCounter;
+    float fallMultiplier;
+private:
+    bool CheckBottomCollision();
 };
 
 class Straight : public Tetromino
