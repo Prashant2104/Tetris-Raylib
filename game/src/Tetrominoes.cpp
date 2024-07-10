@@ -21,12 +21,12 @@ void Tetromino::RotateClockwise()
 
     Rotation tempRot = Rotation((int(currentRotation) + 1) % 4);
 
-    if (!CheckRightCollision(1, tempRot) || !CheckLeftCollision(1, tempRot))
+    if (!CheckRightCollision(1) || !CheckLeftCollision(1))
     {
-        if (CheckLeftCollision(1, tempRot)) {
+        if (CheckLeftCollision(1)) {
             MoveRight();
         }
-        else if (CheckRightCollision(1, tempRot))
+        else if (CheckRightCollision(1))
         {
             MoveLeft();
         }
