@@ -32,9 +32,9 @@ void Game::Tick()
 {
     BeginDrawing();
 
+    Inputs();
     Update();
     Draw();
-    tetromino.Falling();
 
     EndDrawing();
 }
@@ -53,6 +53,11 @@ void Game::Draw()
 
 void Game::Update()
 {
+    tetromino.Falling();
+}
+
+void Game::Inputs()
+{
     if (IsKeyPressed(KEY_E))
         tetromino.RotateClockwise();
     if (IsKeyPressed(KEY_Q))
@@ -63,6 +68,6 @@ void Game::Update()
         tetromino.MoveRight();
     if (IsKeyPressed(KEY_S))
         tetromino.IncreaseFall(true);
-    if(IsKeyReleased(KEY_S))
+    if (IsKeyReleased(KEY_S))
         tetromino.IncreaseFall(false);
 }
