@@ -1,24 +1,40 @@
 #include "Tetrominoes.h"
 #include "Settings.h"
 #include <iostream>
-Tetromino::Tetromino(const bool* shape, int dimension, Color color, const Board& board) :
+
+//Tetromino::Tetromino() :
+//    dimension(0),
+//    shape(false),
+//    color(BLACK),
+//    boardPos(Settings::boardSize.GetX() / 2 - dimension / 2, 0),
+//    currentRotation(Rotation::UP)
+//{
+//    currentPosition = boardPos;
+//    fallCounter = 0;
+//    fallMultiplier = 1;
+//    bottomedOut = false;
+//    boardSize = Settings::boardSize;
+//    cellSize = Settings::cellSize;
+//}
+Tetromino::Tetromino(const bool* shape, int dimension, Color color) :
     shape(shape),
     dimension(dimension),
     color(color),
-    boardPos(board.GetBoardSize().GetX() / 2 - dimension / 2, 0),
-    board(board),
+    boardPos(Settings::boardSize.GetX() / 2 - dimension / 2, 0),
     currentRotation(Rotation::UP)
 {
     currentPosition = boardPos;
     fallCounter = 0;
     fallMultiplier = 1;
     bottomedOut = false;
+    boardSize = Settings::boardSize;
+    cellSize = Settings::cellSize;
 }
 
 void Tetromino::RotateClockwise()
 {
     if (bottomedOut) return;
-    int rightDist = currentPosition.GetX() + dimension - board.GetBoardSize().GetX();
+    int rightDist = currentPosition.GetX() + dimension - boardSize.GetX();
     if (rightDist > 0) {
         for (int i = 0; i < rightDist; i++)
         {
@@ -38,7 +54,7 @@ void Tetromino::RotateClockwise()
 void Tetromino::RotateCounterClockwise()
 {
     if (bottomedOut) return;
-    int rightDist = currentPosition.GetX() + dimension - board.GetBoardSize().GetX();
+    int rightDist = currentPosition.GetX() + dimension - boardSize.GetX();
     if (rightDist > 0) {
         for (int i = 0; i < rightDist; i++)
         {
@@ -74,7 +90,7 @@ void Tetromino::MoveLeft()
 void Tetromino::MoveRight()
 {
     if (bottomedOut) return;
-    int distance = currentPosition.GetX() + dimension - board.GetBoardSize().GetX();
+    int distance = currentPosition.GetX() + dimension - boardSize.GetX();
     if (distance < 0) {
         currentPosition.SetX(currentPosition.GetX() + 1);
         return;
@@ -93,7 +109,7 @@ void Tetromino::Falling()
     if (fallCounter >= Settings::fallTime) {
         fallCounter = 0;
 
-        int distance = currentPosition.GetY() + dimension - board.GetBoardSize().GetY();
+        int distance = currentPosition.GetY() + dimension - boardSize.GetY();
         if (distance < 0) {
             currentPosition.SetY(currentPosition.GetY() + 1);
             return;
@@ -132,7 +148,7 @@ void Tetromino::Draw() const
             }
             if (cell)
             {
-                board.DrawCell(currentPosition + Vec2<int>{x, y}, color);
+                DrawCell(currentPosition + Vec2<int>{x, y}, color);
             }
         }
     }
@@ -150,15 +166,11 @@ void Tetromino::IncreaseFall(bool fast)
 
 bool Tetromino::CheckBottomCollision(int layerFromBottom)
 {
-    return CheckBottomCollision(layerFromBottom, currentRotation);
-}
-bool Tetromino::CheckBottomCollision(int layerFromBottom, Rotation rotation)
-{
     if (layerFromBottom == 0) return true;
 
     for (int i = 0; i < dimension; i++) {
         bool isCellFilled = false;
-        switch (rotation)
+        switch (currentRotation)
         {
         case Tetromino::Rotation::UP:
             isCellFilled = shape[i + (dimension * (dimension - layerFromBottom))];
@@ -182,15 +194,11 @@ bool Tetromino::CheckBottomCollision(int layerFromBottom, Rotation rotation)
 
 bool Tetromino::CheckLeftCollision(int layerFromLeft)
 {
-    return CheckLeftCollision(layerFromLeft, currentRotation);
-}
-bool Tetromino::CheckLeftCollision(int layerFromLeft, Rotation rotation)
-{
     if (layerFromLeft == 0) return true;
     layerFromLeft -= 1;
     for (int i = 0; i < dimension; i++) {
         bool isCellFilled = false;
-        switch (rotation)
+        switch (currentRotation)
         {
         case Tetromino::Rotation::UP:
             isCellFilled = shape[dimension * i + layerFromLeft];
@@ -214,15 +222,11 @@ bool Tetromino::CheckLeftCollision(int layerFromLeft, Rotation rotation)
 
 bool Tetromino::CheckRightCollision(int layerFromRight)
 {
-    return CheckRightCollision(layerFromRight, currentRotation);
-}
-bool Tetromino::CheckRightCollision(int layerFromRight, Rotation rotation)
-{
     if (layerFromRight == 0) return true;
     layerFromRight -= 1;
     for (int i = 0; i < dimension; i++) {
         bool isCellFilled = false;
-        switch (rotation)
+        switch (currentRotation)
         {
         case Tetromino::Rotation::UP:
             isCellFilled = shape[(dimension - 1) + (dimension * i) - layerFromRight];
@@ -242,4 +246,11 @@ bool Tetromino::CheckRightCollision(int layerFromRight, Rotation rotation)
         if (isCellFilled) return false;
     }
     return true;
+}
+
+void Tetromino::DrawCell(Vec2<int> pos, Color color) const
+{
+    assert(pos.GetX() >= 0 && pos.GetY() >= 0 && pos.GetX() < boardSize.GetX() && pos.GetY() < boardSize.GetY());
+    Vec2<int> topLeft = Settings::boardPosition + Settings::padding + (pos * cellSize);
+    raycpp::DrawRectangle(topLeft, Vec2<int>{ cellSize, cellSize} - Settings::padding, color);
 }

@@ -9,8 +9,7 @@ Board board(Settings::boardPosition,
     Settings::cellSize,
     Settings::padding);
 
-Game::Game(int width, int height, int fps, char* title) :
-    tetromino(board)
+Game::Game(int width, int height, int fps, char* title)
 {
     assert(!GetWindowHandle()); //If assertion triggers: Window is already open
     InitWindow(width, height, title);
@@ -39,6 +38,11 @@ void Game::Tick()
     EndDrawing();
 }
 
+void Game::SpawnTetromino(int index)
+{
+
+}
+
 void Game::Draw()
 {
     ClearBackground(RAYWHITE);
@@ -58,16 +62,16 @@ void Game::Update()
 
 void Game::Inputs()
 {
-    if (IsKeyPressed(KEY_E))
-        tetromino.RotateClockwise();
-    if (IsKeyPressed(KEY_Q))
-        tetromino.RotateCounterClockwise();
-    if (IsKeyPressed(KEY_A))
-        tetromino.MoveLeft();
-    if (IsKeyPressed(KEY_D))
-        tetromino.MoveRight();
-    if (IsKeyPressed(KEY_S))
-        tetromino.IncreaseFall(true);
-    if (IsKeyReleased(KEY_S))
-        tetromino.IncreaseFall(false);
+     if (IsKeyPressed(KEY_E))
+         tetromino.RotateClockwise();
+     if (IsKeyPressed(KEY_Q))
+         tetromino.RotateCounterClockwise();
+     if (IsKeyPressed(KEY_A))
+         tetromino.MoveLeft();
+     if (IsKeyPressed(KEY_D))
+         tetromino.MoveRight();
+     if (IsKeyPressed(KEY_S))
+         tetromino.IncreaseFall(true);
+     if (IsKeyReleased(KEY_S))
+         tetromino.IncreaseFall(false);
 }

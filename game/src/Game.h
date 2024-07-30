@@ -1,5 +1,6 @@
 #pragma once
 #include "Tetrominoes.h"
+#include <vector>
 class Game {
 public:
     Game(int width, int height, int fps, char* title); //Creating a constructor to set window
@@ -10,10 +11,11 @@ public:
     bool GameShouldClose() const;
 
     void Tick();
+    void SpawnTetromino(int index);
 private:
     void Draw();
     void Update();
     void Inputs();
 
-    El tetromino;
+    Straight tetromino;
 };

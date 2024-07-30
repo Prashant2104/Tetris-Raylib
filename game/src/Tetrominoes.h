@@ -16,7 +16,8 @@ public:
         LEFT
     };
 public:
-    Tetromino(const bool* shape, int dimension, Color color, const Board& board);
+    //Tetromino();
+    Tetromino(const bool* shape, int dimension, Color color);
     void RotateClockwise();
     void RotateCounterClockwise();
     void MoveLeft();
@@ -26,11 +27,12 @@ public:
     void IncreaseFall(bool fast);
 private:
     Vec2<int> boardPos;
+    Vec2<int> boardSize;
+    int cellSize;
     Rotation currentRotation;
     const bool* shape;
     const int dimension;
     const Color color;
-    const Board& board;
     Vec2<int> currentPosition;
     float fallCounter;
     float fallMultiplier;
@@ -39,18 +41,15 @@ private:
     bool CheckBottomCollision(int layerFromBottom);
     bool CheckLeftCollision(int layerFromLeft);
     bool CheckRightCollision(int layerFromRight);
-
-    bool CheckBottomCollision(int layerFromBottom, Rotation rotation);
-    bool CheckLeftCollision(int layerFromLeft, Rotation rotation);
-    bool CheckRightCollision(int layerFromRight, Rotation rotation);
+    void DrawCell(Vec2<int> pos, Color color) const;
 };
 
 class Straight : public Tetromino
 {
 public:
-    Straight(const Board& board)
+    Straight()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
@@ -66,9 +65,9 @@ private:
 class Square : public Tetromino
 {
 public:
-    Square(const Board& board)
+    Square()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
@@ -82,9 +81,9 @@ private:
 class Tee : public Tetromino
 {
 public:
-    Tee(const Board& board)
+    Tee()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
@@ -93,15 +92,15 @@ private:
                                      1,1,1,
                                      0,0,0 };
     static constexpr int dimension = 3;
-    static constexpr Color color = MAGENTA;
+    static constexpr Color color = PURPLE;
 };
 
 class Jay : public Tetromino
 {
 public:
-    Jay(const Board& board)
+    Jay()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
@@ -116,9 +115,9 @@ private:
 class El : public Tetromino
 {
 public:
-    El(const Board& board)
+    El()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
@@ -133,9 +132,9 @@ private:
 class SkewS : public Tetromino
 {
 public:
-    SkewS(const Board& board)
+    SkewS()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
@@ -150,9 +149,9 @@ private:
 class SkewZ : public Tetromino
 {
 public:
-    SkewZ(const Board& board)
+    SkewZ()
         :
-        Tetromino(shape, dimension, color, board)
+        Tetromino(shape, dimension, color)
     {
         static_assert(sizeof(shape) / sizeof(bool) == dimension * dimension);
     }
