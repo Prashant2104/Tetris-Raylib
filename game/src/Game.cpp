@@ -34,6 +34,7 @@ void Game::Tick()
     Inputs();
     Update();
     Draw();
+    ShowControls();
 
     EndDrawing();
 }
@@ -74,4 +75,14 @@ void Game::Inputs()
          tetromino.IncreaseFall(true);
      if (IsKeyReleased(KEY_S))
          tetromino.IncreaseFall(false);
+}
+
+void Game::ShowControls()
+{
+    DrawText("Controls", 400, 50, 30, BLACK);
+    DrawText("A - Move Left ", 400, 90, 25, BLACK);
+    DrawText("D - Move Right ", 400, 125, 25, BLACK);
+    DrawText("S - Increase Fall Speed", 400, 160, 25, BLACK);
+    DrawText("Q - Rotate Anti-Clockwise", 400, 195, 25, BLACK);
+    DrawText("E - Rotate Clockwise", 400, 230, 25, BLACK);
 }

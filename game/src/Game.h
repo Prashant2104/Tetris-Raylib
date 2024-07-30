@@ -16,6 +16,7 @@ private:
     void Draw();
     void Update();
     void Inputs();
+    void ShowControls();
 
     Straight tetromino;
 };
