@@ -1,84 +1,102 @@
 #include "Board.h"
-#include<assert.h>
-Board::Cell::Cell() :
-    bExists(false),
-    color(WHITE)
+#include "Colors.h"
+
+Board::Board()
 {
+	numRows = Settings::boardSizeY;
+	numCols = Settings::boardSizeX;
+	cellSize = Settings::cellSize;
+	padding = Settings::padding;
+	boardOffsetX = Settings::boardOffsetX;
+	boardOffsetY = Settings::boardOffsetY;
+	colors = GetAllCellColors();
+	Initialize();
 }
 
-void Board::Cell::SetColor(Color c)
+void Board::Initialize()
 {
-    color = c;
-    bExists = true;
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++)
+		{
+			grid[row][col] = 0;
+		}
+	}
 }
 
-void Board::Cell::Remove()
+void Board::Draw()
 {
-    bExists = false;
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++)
+		{
+			int cellValue = grid[row][col];
+			DrawRectangle(col * cellSize + boardOffsetX, row * cellSize + boardOffsetY, cellSize - padding, cellSize - padding, colors[cellValue]);
+		}
+	}
+	//Kinda hard coded boundry
+	DrawRectangle(boardOffsetX - 16, boardOffsetY + cellSize * numRows, numCols * cellSize + padding * cellSize + 1, 15, BLACK);
+	DrawRectangle(boardOffsetX - 16, boardOffsetY, 15, numRows * cellSize + padding + 1, BLACK);
+	DrawRectangle(boardOffsetX + cellSize * numCols, boardOffsetY, 15, numRows * cellSize + padding + 1, BLACK);
 }
 
-bool Board::Cell::Exists() const
+bool Board::IsCellOutside(int row, int col)
 {
-    return bExists;
+	if (row >= 0 && row < numRows && col >= 0 && col < numCols) {
+		return false;
+	}
+	return true;
 }
 
-Color Board::Cell::GetColor() const
+bool Board::IsCellEmpty(int row, int col)
 {
-    return color;
+	if (grid[row][col] == 0) {
+		return true;
+	}
+	return false;
 }
 
-Board::Board(Vec2<int> screenPos, Vec2<int> boardSize, int cellSize, int padding) :
-    screenPos(screenPos),
-    boardSize(boardSize),
-    cellSize(cellSize),
-    padding(padding)
+int Board::ClearFullRows()
 {
-    assert(boardSize.GetX() > 0 && boardSize.GetY() > 0);
-    assert(cellSize > 0);
-    cells.resize(boardSize.GetX() * boardSize.GetY());
+	int completed = 0;
+	for (int row = numRows - 1; row >= 0; row--)
+	{
+		if (IsRowFull(row))
+		{
+			ClearRow(row);
+			completed++;
+		}
+		else if (completed > 0)
+		{
+			MoveRowDown(row, completed);
+		}
+	}
+	return completed;
 }
 
-void Board::SetCell(Vec2<int> pos, Color c)
+bool Board::IsRowFull(int row)
 {
-    assert(pos.GetX() >= 0 && pos.GetY() >= 0 && pos.GetX() < boardSize.GetX() && pos.GetY() < boardSize.GetY());
-    cells[pos.GetY() * boardSize.GetX() + pos.GetX()].SetColor(c);
+	for (int column = 0; column < numCols; column++)
+	{
+		if (grid[row][column] == 0)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
-void Board::DrawCell(Vec2<int> pos) const
+void Board::ClearRow(int row)
 {
-    DrawCell(pos, cells[pos.GetY() * boardSize.GetX() + pos.GetX()].GetColor());
+	for (int column = 0; column < numCols; column++)
+	{
+		grid[row][column] = 0;
+	}
 }
 
-void Board::DrawCell(Vec2<int> pos, Color color) const
+void Board::MoveRowDown(int row, int numRows)
 {
-    assert(pos.GetX() >= 0 && pos.GetY() >= 0 && pos.GetX() < boardSize.GetX() && pos.GetY() < boardSize.GetY());
-    Vec2<int> topLeft = screenPos + padding + (pos * cellSize);
-    raycpp::DrawRectangle(topLeft, Vec2<int>{ cellSize, cellSize} - padding, color);
-}
-
-void Board::DrawBorder() const
-{
-    raycpp::DrawRectangleLinesEx(screenPos - (cellSize / 2), (boardSize * cellSize) + cellSize + padding, cellSize / 2, GetColor(0x000000af));
-}
-
-void Board::Draw() const
-{
-    for (int i = 0; i < boardSize.GetY(); i++) {
-        for (int j = 0; j < boardSize.GetX(); j++) {
-            if (CellExists({ j, i })) {
-                DrawCell({ j, i });
-            }
-        }
-    }
-    DrawBorder();
-}
-
-bool Board::CellExists(Vec2<int> pos) const
-{
-    return cells[pos.GetY() * boardSize.GetX() + pos.GetX()].Exists();
-}
-
-Vec2<int> Board::GetBoardSize() const
-{
-    return boardSize;
+	for (int column = 0; column < numCols; column++)
+	{
+		grid[row + numRows][column] = grid[row][column];
+		grid[row][column] = 0;
+	}
 }

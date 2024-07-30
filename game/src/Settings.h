@@ -1,19 +1,27 @@
 #pragma once
-#include "Vec2.h"
+#include "Position.h"
 
 namespace Settings {
-    //Window Settings
-    inline constexpr int screenWidth = 800;
-    inline constexpr int screenHeight = 720;
-    inline constexpr int fps = 60;
-    inline constexpr char* title = "Tetris";
+	//Window Settings
+	inline constexpr int screenWidth = 720;
+	inline constexpr int screenHeight = 720;
+	inline constexpr int fps = 60;
+	inline constexpr char* title = "Tetris";
 
-    //Board Settings
-    inline constexpr int cellSize = 30;
-    inline constexpr int padding = 1;
-    inline constexpr Vec2<int> boardPosition{ 60,60 };
-    inline constexpr Vec2<int> boardSize{ 10,20 };
+	//Board Settings
+	inline constexpr int cellSize = 30;
+	inline constexpr int padding = 1;
 
-    //Tetromino Settings
-    inline constexpr int fallTime = 1;
+	inline constexpr int boardSizeX = 10;
+	inline constexpr int boardSizeY = 20;
+
+	inline constexpr int boardOffsetX = 50;
+	inline constexpr int boardOffsetY = 50;
+
+	//Tetromino Settings
+	inline constexpr int fallTime = 1;
+	inline constexpr int fallSpeed = 1;
+
+	//Fonts
+	inline constexpr char* HeadlineFont = "resources/Fonts/Dosis-SemiBold.ttf";
 }

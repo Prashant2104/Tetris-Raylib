@@ -1,17 +1,11 @@
-#include "Game.h"
+#include "raylib.h"
 #include "Settings.h"
+#include "Game.h"
+void main() {
+	Game game(Settings::screenWidth, Settings::screenHeight, Settings::fps, Settings::title);
 
-//----------------------------------------------------------------------------------
-// Main Entry Point
-//----------------------------------------------------------------------------------
-int main()
-{
-    Game game(Settings::screenWidth, Settings::screenHeight, Settings::fps, Settings::title);
-
-    while (!game.GameShouldClose())
-    {
-        game.Tick();
-    }
-
-    return 0;
+	while (!game.GameShouldClose())
+	{
+		game.Tick();
+	}
 }

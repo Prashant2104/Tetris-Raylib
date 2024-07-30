@@ -1,33 +1,25 @@
 #pragma once
-#include "RaylibCpp.h"
-#include <vector>
-#include "Vec2.h"
-
-class Board {
-private:
-    class Cell {
-    public:
-        Cell();
-        void SetColor(Color c);
-        void Remove();
-        bool Exists() const;
-        Color GetColor() const;
-    private:
-        bool bExists;
-        Color color;
-    };
+#include<vector>
+#include"raylib.h"
+#include"Settings.h"
+class Board
+{
 public:
-    Board(Vec2<int> screenPos, Vec2<int> boardSize, int cellSize, int padding);
-    void SetCell(Vec2<int> pos, Color c);
-    void DrawCell(Vec2<int> pos) const;
-    void DrawCell(Vec2<int> pos, Color color) const;
-    void DrawBorder() const;
-    void Draw() const;
-    bool CellExists(Vec2<int> pos) const;
-    Vec2<int> GetBoardSize() const;
+	Board();
+	void Initialize();
+	void Draw();
+	bool IsCellOutside(int row, int col);
+	bool IsCellEmpty(int row, int col);
+	int ClearFullRows();
+	int grid[Settings::boardSizeY][Settings::boardSizeX];
 private:
-    std::vector<Cell> cells;
-    const Vec2<int> boardSize;
-    const int cellSize, padding;
-    Vec2<int> screenPos;
+	int numRows, numCols;
+	int boardOffsetX, boardOffsetY;
+	int cellSize;
+	int padding;
+	std::vector<Color> colors;
+	bool IsRowFull(int row);
+	void ClearRow(int row);
+	void MoveRowDown(int row, int numRows);
 };
+
