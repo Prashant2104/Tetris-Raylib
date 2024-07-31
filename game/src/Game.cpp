@@ -81,11 +81,35 @@ void Game::Draw()
 	ClearBackground(RAYWHITE);
 	board.Draw(); 
 
-	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
-	nextBlock.Draw(Settings::boardOffsetX + 275, Settings::boardOffsetY + 250);
-	heldBlock.Draw(Settings::boardOffsetX + 275, Settings::boardOffsetY + 350);
-
 	ui.DrawUI();
+
+	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
+
+	switch (nextBlock.id)
+	{
+	case 3:
+		nextBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 265);
+		break;
+	case 4:
+		nextBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 250);
+		break;
+	default:
+		nextBlock.Draw(Settings::boardOffsetX + 300, Settings::boardOffsetY + 250);
+		break;
+	}
+
+	switch (heldBlock.id)
+	{
+	case 3:
+		heldBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 465);
+		break;
+	case 4:
+		heldBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 450);
+		break;
+	default:
+		heldBlock.Draw(Settings::boardOffsetX + 300, Settings::boardOffsetY + 450);
+		break;
+	}
 
 	EndDrawing();
 }
@@ -121,7 +145,7 @@ void Game::Inputs()
 
 		case KEY_DOWN:
 		case KEY_S:
-			fallMultiplier *= 5;
+			fallMultiplier *= 10;
 			break;
 
 		case KEY_UP:

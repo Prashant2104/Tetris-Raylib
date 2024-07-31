@@ -10,7 +10,8 @@ public:
 	void DrawUI();
 private:
 	void DisplayScore();
-
+	void NextBlockHolder();
+	void HeldBlockHolder();
 private:
 	Font HeadingFont;
 	Font DetailFont;
