@@ -1,7 +1,7 @@
-#include<assert.h>
-#include"raylib.h"
+#include <assert.h>
+#include "raylib.h"
 #include "Game.h"
-#include<iostream>
+#include <iostream>
 
 Game::Game(int width, int height, int fps, char* title)
 {
@@ -24,6 +24,7 @@ Game::Game(int width, int height, int fps, char* title)
 
 	gameOver = false;
 	score = 0;
+	canSwap = true;
 }
 
 Game::~Game() noexcept
@@ -48,6 +49,7 @@ void Game::Reset()
 {
 	gameOver = false;
 	score = 0;
+	canSwap = true;
 	board.Initialize();
 	blocks = GetAllBlocks();
 	currentBlock = GetRandomBlock();
@@ -62,7 +64,7 @@ Block Game::GetRandomBlock()
 	int randomIndex = GetRandomValue(0, blocks.size() - 1);
 	Block block = blocks[randomIndex];
 	if (block.id == currentBlock.id) {
-		Block block = blocks[(randomIndex + 1) % 8];
+		Block block = blocks[(randomIndex + 1) % 7];
 	}
 	//blocks.erase(blocks.begin() + randomIndex);
 	return block;
@@ -80,42 +82,45 @@ void Game::Draw()
 
 	ClearBackground(RAYWHITE);
 	board.Draw(); 
+	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
 
 	ui.DrawUI();
-
-	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
 
 	switch (nextBlock.id)
 	{
 	case 3:
-		nextBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 265);
+		nextBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 215);
 		break;
 	case 4:
-		nextBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 250);
+		nextBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 200);
 		break;
 	default:
-		nextBlock.Draw(Settings::boardOffsetX + 300, Settings::boardOffsetY + 250);
+		nextBlock.Draw(Settings::boardOffsetX + 300, Settings::boardOffsetY + 200);
 		break;
 	}
 
 	switch (heldBlock.id)
 	{
 	case 3:
-		heldBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 465);
+		heldBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 365);
 		break;
 	case 4:
-		heldBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 450);
+		heldBlock.Draw(Settings::boardOffsetX + 290, Settings::boardOffsetY + 350);
 		break;
 	default:
-		heldBlock.Draw(Settings::boardOffsetX + 300, Settings::boardOffsetY + 450);
+		heldBlock.Draw(Settings::boardOffsetX + 300, Settings::boardOffsetY + 350);
 		break;
 	}
+
+	if(gameOver)
+		ui.DrawGameOverScreen();
 
 	EndDrawing();
 }
 
 void Game::Update()
 {
+	if (gameOver) return;
 	fallCounter += GetFrameTime() * fallMultiplier * fallDifficultyMultiplier;
 	if (fallCounter >= fallTime) {
 		fallCounter = 0;
@@ -130,6 +135,7 @@ void Game::Inputs()
 	if (gameOver && keyPressed != 0) {
 		Reset();
 	}
+
 	if (!gameOver) {
 		switch (keyPressed)
 		{
@@ -153,16 +159,23 @@ void Game::Inputs()
 			RotateBlock();
 			break;
 
-		case KEY_SPACE:
+		case KEY_LEFT_SHIFT:
+		case KEY_RIGHT_SHIFT:
 			HoldAndSwapBlock();
+			break;
+
+		case KEY_T:
+			//Testing Keybind
+			gameOver = true;
 			break;
 
 		default:
 			break;
 		}
-	}
-	if (IsKeyReleased(KEY_S) || IsKeyReleased(KEY_DOWN)) {
-		fallMultiplier = Settings::fallSpeed;
+
+		if (IsKeyReleased(KEY_S) || IsKeyReleased(KEY_DOWN)) {
+			fallMultiplier = Settings::fallSpeed;
+		}
 	}
 }
 
@@ -204,7 +217,12 @@ void Game::RotateBlock()
 
 void Game::HoldAndSwapBlock()
 {
-	if (heldBlock.id == 8) {
+	if (!canSwap) return;
+
+	canSwap = false;
+	ui.CanSwap(canSwap);
+
+	if (heldBlock.id == 0) {
 		heldBlock = currentBlock;
 		currentBlock = nextBlock;
 		nextBlock = GetRandomBlock();
@@ -266,6 +284,9 @@ void Game::LockBlock()
 	int rowsCleared = board.ClearFullRows();
 	UpdateScore(rowsCleared);
 	fallDifficultyMultiplier += 0.1;
+
+	canSwap = true;
+	ui.CanSwap(canSwap);
 }
 
 void Game::UpdateScore(int lines)

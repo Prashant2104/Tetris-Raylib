@@ -3,7 +3,7 @@
 
 namespace Settings {
 	//Window Settings
-	inline constexpr int screenWidth = 720;
+	inline constexpr int screenWidth = 625;
 	inline constexpr int screenHeight = 720;
 	inline constexpr int fps = 60;
 	inline constexpr char* title = "Tetris";

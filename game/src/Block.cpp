@@ -26,7 +26,7 @@ void Block::Move(int rows, int cols)
 
 void Block::Rotate()
 {
-	if(id!=4)
+	if(id != 4)
 		rotationState = Rotation((int(rotationState) + 1) % 4);
 }
 
@@ -51,6 +51,7 @@ std::vector<Position> Block::GetCellPositions()
 void Block::ResetPos()
 {
 	rowOffset = columnOffset = 0;
+	rotationState = Rotation::UP;
 	switch (id)
 	{
 	case 3:

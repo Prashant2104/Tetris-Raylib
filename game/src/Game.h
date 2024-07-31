@@ -48,5 +48,7 @@ private:
 	Board board;
 	Block currentBlock, nextBlock, heldBlock;
 
+	bool canSwap;
+
 	UI ui;
 };
