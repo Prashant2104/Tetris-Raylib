@@ -95,3 +95,16 @@ public:
 		Move(0, 3);
 	}
 };
+
+class EmptyBlock:public Block
+{
+public:
+	EmptyBlock()
+	{
+		id = 8;
+		cells[0] = { };
+		cells[1] = { };
+		cells[2] = { };
+		cells[3] = { };
+	}
+};

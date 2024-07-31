@@ -7,16 +7,10 @@ UI::UI()
 	sprintf(scoreText, "%d", 0);
 }
 
-UI::UI(Font headline):
-	HeadingFont(headline)
+void UI::Setup()
 {
-	//HeadingFont = LoadFontEx("resources/Fonts/blocks.ttf", 128, NULL, 0);
-	sprintf(scoreText, "%d", 0);
-}
-
-UI::~UI() noexcept
-{
-	//UnloadFont(HeadingFont);
+	HeadingFont = LoadFontEx("resources/Fonts/Dosis-SemiBold.ttf", 246, NULL, 0);
+	DetailFont = LoadFontEx("resources/Fonts/Dosis-Medium.ttf", 246, NULL, 0);
 }
 
 void UI::UpdateScoreText(int score)
@@ -31,7 +25,7 @@ void UI::DrawUI()
 
 void UI::DisplayScore()
 {
-	//if(IsFontReady(HeadingFont))
-		DrawTextEx(HeadingFont, "Score", { 400, 50 }, 40, 10, BLACK);
-	DrawText(scoreText, 400, 100, 30, BLACK);
+	//DrawRectangleRounded({ 390, 40, 200, 100 }, 0.2, 2, BLUE);
+	DrawTextEx(HeadingFont, "Score", { 400, 50 }, 40, 10, BLACK);
+	DrawTextEx(DetailFont, scoreText, { 400, 100 }, 30, 10, BLACK);
 }

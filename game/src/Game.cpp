@@ -2,16 +2,14 @@
 #include"raylib.h"
 #include "Game.h"
 #include<iostream>
-#include "ResourceLoader.h"
 
 Game::Game(int width, int height, int fps, char* title)
 {
 	assert(width > 0 && height > 0 && fps > 0);
 	InitWindow(width, height, title);
 	SetTargetFPS(fps);
-	ResourceLoader r;
-	UI tempui = UI(r.LoadFontRes());
-	ui = tempui;
+
+	ui.Setup();
 
 	fallCounter = 0;
 	fallMultiplier = Settings::fallSpeed;
@@ -22,6 +20,7 @@ Game::Game(int width, int height, int fps, char* title)
 	blocks = GetAllBlocks();
 	currentBlock = GetRandomBlock();
 	nextBlock = GetRandomBlock();
+	heldBlock = EmptyBlock();
 
 	gameOver = false;
 	score = 0;
@@ -62,6 +61,9 @@ Block Game::GetRandomBlock()
 	}
 	int randomIndex = GetRandomValue(0, blocks.size() - 1);
 	Block block = blocks[randomIndex];
+	if (block.id == currentBlock.id) {
+		Block block = blocks[(randomIndex + 1) % 8];
+	}
 	//blocks.erase(blocks.begin() + randomIndex);
 	return block;
 }
@@ -77,21 +79,11 @@ void Game::Draw()
 	BeginDrawing();
 
 	ClearBackground(RAYWHITE);
-	board.Draw();
-	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
+	board.Draw(); 
 
-	switch (nextBlock.id)
-	{
-	case 3:
-		nextBlock.Draw(255, 290);
-		break;
-	case 4:
-		nextBlock.Draw(255, 290);
-		break;
-	default:
-		nextBlock.Draw(270, 270);
-		break;
-	}
+	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
+	nextBlock.Draw(Settings::boardOffsetX + 275, Settings::boardOffsetY + 250);
+	heldBlock.Draw(Settings::boardOffsetX + 275, Settings::boardOffsetY + 350);
 
 	ui.DrawUI();
 
@@ -135,6 +127,10 @@ void Game::Inputs()
 		case KEY_UP:
 		case KEY_W:
 			RotateBlock();
+			break;
+
+		case KEY_SPACE:
+			HoldAndSwapBlock();
 			break;
 
 		default:
@@ -182,12 +178,31 @@ void Game::RotateBlock()
 	}
 }
 
+void Game::HoldAndSwapBlock()
+{
+	if (heldBlock.id == 8) {
+		heldBlock = currentBlock;
+		currentBlock = nextBlock;
+		nextBlock = GetRandomBlock();
+
+		heldBlock.ResetPos();
+	}
+	else
+	{
+		Block temp = currentBlock;
+		currentBlock = heldBlock;
+		heldBlock = temp;
+		currentBlock.ResetPos();
+		heldBlock.ResetPos();
+	}
+}
+
 bool Game::IsBlockOutside()
 {
 	std::vector<Position> tiles = currentBlock.GetCellPositions();
 	for (Position item : tiles) {
 		if (board.IsCellOutside(item.row, item.column)) {
-			std::cout << item.row << " " << item.column << std::endl;
+			//std::cout << item.row << " " << item.column << std::endl;
 			if (item.row < 20 && item.row > 0) {
 				if (item.column < 0) {
 					MoveBlockRight();
@@ -226,12 +241,12 @@ void Game::LockBlock()
 	nextBlock = GetRandomBlock();
 	int rowsCleared = board.ClearFullRows();
 	UpdateScore(rowsCleared);
-	fallDifficultyMultiplier += 0.25;
+	fallDifficultyMultiplier += 0.1;
 }
 
 void Game::UpdateScore(int lines)
 {
 	score += lines * 100;
-	std::cout << score << std::endl;
-	//ui.UpdateScoreText(score);
+	//std::cout << score << std::endl;
+	ui.UpdateScoreText(score);
 }

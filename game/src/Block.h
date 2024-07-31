@@ -22,6 +22,7 @@ public:
 	void Rotate();
 	void UndoRotate();
 	std::vector<Position> GetCellPositions();
+	void ResetPos();
 private:
 	int cellSize;
 	Rotation rotationState;

@@ -4,11 +4,8 @@
 class UI {
 public:
 	UI();
-	UI(Font headline);
-	//UI(const UI& other) = delete;	//Deleting copy constructor
-	//UI& operator=(const UI& other) = delete; //Deleting copy operator
-	~UI() noexcept; //Destructor
 
+	void Setup();
 	void UpdateScoreText(int score);
 	void DrawUI();
 private:
@@ -16,6 +13,6 @@ private:
 
 private:
 	Font HeadingFont;
-	//Font DetailFont;
+	Font DetailFont;
 	char scoreText[10];
 };

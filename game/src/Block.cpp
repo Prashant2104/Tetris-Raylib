@@ -26,12 +26,14 @@ void Block::Move(int rows, int cols)
 
 void Block::Rotate()
 {
-	rotationState = Rotation((int(rotationState) + 1) % 4);
+	if(id!=4)
+		rotationState = Rotation((int(rotationState) + 1) % 4);
 }
 
 void Block::UndoRotate()
 {
-	rotationState = Rotation((int(rotationState) + 3) % 4);
+	if (id != 4)
+		rotationState = Rotation((int(rotationState) + 3) % 4);
 }
 
 std::vector<Position> Block::GetCellPositions()
@@ -44,4 +46,21 @@ std::vector<Position> Block::GetCellPositions()
 		movedTiles.push_back(newPos);
 	}
 	return movedTiles;
+}
+
+void Block::ResetPos()
+{
+	rowOffset = columnOffset = 0;
+	switch (id)
+	{
+	case 3:
+		Move(-1, 3);
+		break;
+	case 4:
+		Move(0, 4);
+		break;
+	default:
+		Move(0, 3);
+		break;
+	}
 }

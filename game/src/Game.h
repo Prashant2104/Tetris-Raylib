@@ -31,6 +31,7 @@ private:
 	void MoveBlockLeft();
 	void MoveBlockRight();
 	void RotateBlock();
+	void HoldAndSwapBlock();
 
 	bool IsBlockOutside();
 	bool BlockFits();
@@ -45,7 +46,7 @@ private:
 
 	std::vector<Block> blocks;
 	Board board;
-	Block currentBlock, nextBlock;
+	Block currentBlock, nextBlock, heldBlock;
 
 	UI ui;
 };
