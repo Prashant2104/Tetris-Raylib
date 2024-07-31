@@ -29,7 +29,7 @@ void UI::CanSwap(bool can)
 
 void UI::DrawGameOverScreen()
 {
-	DrawRectangleRounded({ 100, 250, 400, 200 }, 0.2, 2, GRAY);
+	DrawRectangleRounded({ 100, 250, 400, 200 }, 0.2f, 2, GRAY);
 	DrawTextEx(HeadingFont, "Game Over", { 175, 260 }, 65, 5, BLACK);
 	DrawTextEx(DetailFont, "Score: ", { 175, 325 }, 50, 5, BLACK);
 	DrawTextEx(DetailFont, scoreText, { 305, 325 }, 50, 5, BLACK);
@@ -46,34 +46,34 @@ void UI::DrawUI()
 
 void UI::DisplayScore()
 {
-	DrawRectangleRounded({ 390, 50, 200, 125 }, 0.2, 2, LIGHTGRAY);
+	DrawRectangleRounded({ 390, 50, 200, 125 }, 0.2f, 2, LIGHTGRAY);
 	DrawTextEx(HeadingFont, "Score", { 430, 55 }, 40, 10, BLACK);
 	DrawTextEx(DetailFont, scoreText, { 440, 110 }, 40, 10, BLACK);
 }
 
 void UI::NextBlockHolder()
 {
-	DrawRectangleRounded({ 390, 200, 200, 125 }, 0.2, 2, LIGHTGRAY);
+	DrawRectangleRounded({ 390, 200, 200, 125 }, 0.2f, 2, LIGHTGRAY);
 	DrawTextEx(HeadingFont, "Next", { 440, 205 }, 40, 10, BLACK);
 }
 
 void UI::HeldBlockHolder()
 {
-	DrawRectangleRounded({ 390, 350, 200, 125 }, 0.2, 2, LIGHTGRAY);
+	DrawRectangleRounded({ 390, 350, 200, 125 }, 0.2f, 2, LIGHTGRAY);
 	DrawTextEx(HeadingFont, "Held", { 440, 355 }, 40, 10, BLACK);
 	if (canSwap)
 	{
-		DrawTextureEx(UnlockedIcon, { 535, 355 }, 0, 0.08, WHITE);
+		DrawTextureEx(UnlockedIcon, { 535, 355 }, 0, 0.08f, WHITE);
 	}
 	else
 	{
-		DrawTextureEx(LockedIcon, { 535, 355 }, 0, 0.08, WHITE);
+		DrawTextureEx(LockedIcon, { 535, 355 }, 0, 0.08f, WHITE);
 	}
 }
 
 void UI::ShowControls()
 {
-	DrawRectangleRounded({ 390, 500, 200, 155 }, 0.2, 2, LIGHTGRAY);
+	DrawRectangleRounded({ 390, 500, 200, 155 }, 0.2f, 2, LIGHTGRAY);
 	DrawTextEx(HeadingFont, "Controls", { 405, 505 }, 40, 10, BLACK);
 	DrawTextEx(DetailFont, "Left/A - Move Left", { 405, 545 }, 25, 1, BLACK);
 	DrawTextEx(DetailFont, "Right/D - Move Right", { 405, 570 }, 25, 1, BLACK);

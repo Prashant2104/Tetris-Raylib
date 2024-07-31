@@ -21,7 +21,6 @@ private:
 
 	Texture2D LockedIcon;
 	Texture2D UnlockedIcon;
-	Texture2D GameEndSS;
 
 	char scoreText[10];
 	bool canSwap;
