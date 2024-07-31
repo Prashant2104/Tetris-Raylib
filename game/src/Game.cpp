@@ -8,8 +8,10 @@ Game::Game(int width, int height, int fps, char* title)
 	assert(width > 0 && height > 0 && fps > 0);
 	InitWindow(width, height, title);
 	SetTargetFPS(fps);
+	InitAudioDevice();
 
 	ui.Setup();
+	sounds.Setup();
 
 	fallCounter = 0;
 	fallMultiplier = Settings::fallSpeed;
@@ -29,6 +31,7 @@ Game::Game(int width, int height, int fps, char* title)
 
 Game::~Game() noexcept
 {
+	CloseAudioDevice();
 	CloseWindow();
 }
 
@@ -50,6 +53,7 @@ void Game::Reset()
 	gameOver = false;
 	score = 0;
 	canSwap = true;
+	fallDifficultyMultiplier = 1;
 	board.Initialize();
 	blocks = GetAllBlocks();
 	currentBlock = GetRandomBlock();
@@ -120,6 +124,7 @@ void Game::Draw()
 
 void Game::Update()
 {
+	sounds.PlayBgm();
 	if (gameOver) return;
 	fallCounter += GetFrameTime() * fallMultiplier * fallDifficultyMultiplier;
 	if (fallCounter >= fallTime) {
@@ -166,7 +171,6 @@ void Game::Inputs()
 
 		case KEY_T:
 			//Testing Keybind
-			gameOver = true;
 			break;
 
 		default:
@@ -213,6 +217,7 @@ void Game::RotateBlock()
 	if (!BlockFits()) {
 		currentBlock.UndoRotate();
 	}
+	sounds.BlockMove();
 }
 
 void Game::HoldAndSwapBlock()
@@ -237,6 +242,8 @@ void Game::HoldAndSwapBlock()
 		currentBlock.ResetPos();
 		heldBlock.ResetPos();
 	}
+
+	sounds.BlockSwap();
 }
 
 bool Game::IsBlockOutside()
@@ -279,10 +286,19 @@ void Game::LockBlock()
 	currentBlock = nextBlock;
 	if (!BlockFits()) {
 		gameOver = true;
+		sounds.GameOver();
 	}
 	nextBlock = GetRandomBlock();
 	int rowsCleared = board.ClearFullRows();
 	UpdateScore(rowsCleared);
+	if (rowsCleared > 0) {
+		sounds.LineClear();
+	}
+	else
+	{
+		sounds.BlockPlace();
+	}
+
 	fallDifficultyMultiplier += 0.1;
 
 	canSwap = true;

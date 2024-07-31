@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "Blocks.cpp"
 #include "UI.h"
+#include "Sounds.h"
 
 class Game {
 public:
@@ -51,4 +52,5 @@ private:
 	bool canSwap;
 
 	UI ui;
+	Sounds sounds;
 };
