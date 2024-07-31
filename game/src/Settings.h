@@ -7,6 +7,7 @@ namespace Settings {
 	inline constexpr int screenHeight = 720;
 	inline constexpr int fps = 60;
 	inline constexpr char* title = "Tetris";
+	inline constexpr char* iconPath = "resources/Icons/tetris.png";
 
 	//Board Settings
 	inline constexpr int cellSize = 30;
@@ -21,7 +22,4 @@ namespace Settings {
 	//Tetromino Settings
 	inline constexpr int fallTime = 1;
 	inline constexpr int fallSpeed = 1;
-
-	//Fonts
-	inline constexpr char* HeadlineFont = "resources/Fonts/Dosis-SemiBold.ttf";
 }

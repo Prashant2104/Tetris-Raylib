@@ -7,6 +7,8 @@ Game::Game(int width, int height, int fps, char* title)
 {
 	assert(width > 0 && height > 0 && fps > 0);
 	InitWindow(width, height, title);
+	Image icon = LoadImage(Settings::iconPath);
+	SetWindowIcon(icon);
 	SetTargetFPS(fps);
 	InitAudioDevice();
 
