@@ -8,10 +8,10 @@ void Sounds::Setup()
 	SFX_GameOver = LoadSound("resources/Sounds/GameOver.mp3");
 	SFX_LineClear = LoadSound("resources/Sounds/LineClear.mp3");
 
-	BGM = LoadMusicStream("resources/Sounds/BGM.wav");
+	/*BGM = LoadMusicStream("resources/Sounds/BGM.wav");
 	if (IsMusicReady(BGM)) {
 		PlayMusicStream(BGM);
-	}
+	}*/
 }
 
 void Sounds::BlockMove()
@@ -46,5 +46,5 @@ void Sounds::GameOver()
 
 void Sounds::PlayBgm()
 {
-	UpdateMusicStream(BGM);
+	//UpdateMusicStream(BGM);
 }

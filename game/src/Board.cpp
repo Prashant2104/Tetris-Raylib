@@ -29,7 +29,11 @@ void Board::Draw()
 		for (int col = 0; col < numCols; col++)
 		{
 			int cellValue = grid[row][col];
-			DrawRectangle(col * cellSize + boardOffsetX, row * cellSize + boardOffsetY, cellSize - padding, cellSize - padding, colors[cellValue]);
+			if(cellValue == 0)
+				DrawRectangle(col * cellSize + boardOffsetX, row * cellSize + boardOffsetY, cellSize - padding, cellSize - padding, colors[cellValue]);
+			else
+				DrawRectangleGradientEx(Rectangle{ (float)col * cellSize + boardOffsetX, (float)row * cellSize + boardOffsetY, (float)cellSize - padding, (float)cellSize - padding },
+					RAYWHITE, colors[cellValue], colors[cellValue], colors[cellValue]);
 		}
 	}
 	//Kinda hard coded boundry

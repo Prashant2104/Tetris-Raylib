@@ -54,8 +54,12 @@ void Game::Reset()
 {
 	gameOver = false;
 	score = 0;
+	ui.UpdateScoreText(score);
 	canSwap = true;
+	fallCounter = 0;
+	fallMultiplier = Settings::fallSpeed;
 	fallDifficultyMultiplier = 1;
+	fallTime = Settings::fallTime;
 	board.Initialize();
 	blocks = GetAllBlocks();
 	currentBlock = GetRandomBlock();
@@ -86,7 +90,7 @@ void Game::Draw()
 {
 	BeginDrawing();
 
-	ClearBackground(RAYWHITE);
+	ClearBackground(BLACK);
 	board.Draw(); 
 	currentBlock.Draw(Settings::boardOffsetX, Settings::boardOffsetY);
 
