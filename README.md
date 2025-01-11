@@ -4,7 +4,7 @@ UI is not my strongest suit.
 
 ![Screenshot of the game.](/GameScreenshot_v2.png)
 
-Get the windows build here -> [Release](https://github.com/Prashant2104/Tetris-Raylib/releases/tag/v1)
+Get the windows build here -> [Release](https://github.com/Prashant2104/Tetris-Raylib/releases)
 Or Clone the repo if you wanna build for yourself, build instructions are below as provided by [Raylib Game Premake](https://github.com/raylib-extras/game-premake).
 
 # Raylib Setup using Premake5
