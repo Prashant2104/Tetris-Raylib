@@ -2,7 +2,7 @@
 This is a basic version on Tetris written in C++ using Raylib.
 UI is not my strongest suit.
 
-![Screenshot of the game.](/GameScreenshot.png)
+![Screenshot of the game.](/GameScreenshot_v2.png)
 
 Get the windows build here -> [Release](https://github.com/Prashant2104/Tetris-Raylib/releases/tag/v1)
 Or Clone the repo if you wanna build for yourself, build instructions are below as provided by [Raylib Game Premake](https://github.com/raylib-extras/game-premake).
